@@ -13,7 +13,7 @@ class FilerGallery(CMSPlugin):
     gallery = models.ForeignKey('filer_gallery.Gallery')
 
     animation = models.SmallIntegerField(_("animation"), choices=ANIMATION_CHOICES, default=0)
-    animateNumberActive = models.CharField(_("active number color"), default='#FF0000', max_length=7, help_text=_('Default #FF0000 red'))
+    animate_number_active = models.CharField(_("active number color"), default='#FF0000', max_length=7, help_text=_('Default #FF0000 red'))
 
 
     height = models.SmallIntegerField(_("height"),default=200)
