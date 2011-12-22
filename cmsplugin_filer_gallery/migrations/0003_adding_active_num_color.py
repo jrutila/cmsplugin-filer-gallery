@@ -9,13 +9,13 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
         
         # Adding field 'FilerGallery.animateNumberActive'
-        db.add_column('cmsplugin_filergallery', 'animateNumberActive', self.gf('django.db.models.fields.CharField')(default='000000', max_length=6), keep_default=False)
+        db.add_column('cmsplugin_filergallery', 'animate_number_active', self.gf('django.db.models.fields.CharField')(default='000000', max_length=6), keep_default=False)
 
 
     def backwards(self, orm):
         
         # Deleting field 'FilerGallery.animateNumberActive'
-        db.delete_column('cmsplugin_filergallery', 'animateNumberActive')
+        db.delete_column('cmsplugin_filergallery', 'animate_number_active')
 
 
     models = {
@@ -62,7 +62,7 @@ class Migration(SchemaMigration):
         },
         'cmsplugin_filer_gallery.filergallery': {
             'Meta': {'object_name': 'FilerGallery', 'db_table': "'cmsplugin_filergallery'", '_ormbases': ['cms.CMSPlugin']},
-            'animateNumberActive': ('django.db.models.fields.CharField', [], {'default': "'000000'", 'max_length': '6'}),
+            'animate_number_active': ('django.db.models.fields.CharField', [], {'default': "'000000'", 'max_length': '6'}),
             'animation': ('django.db.models.fields.SmallIntegerField', [], {'default': '0'}),
             'cmsplugin_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['cms.CMSPlugin']", 'unique': 'True', 'primary_key': 'True'}),
             'gallery': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['filer_gallery.Gallery']"}),
