@@ -14,13 +14,12 @@ class FilerGalleryPlugin(CMSPluginBase):
     admin_preview = False
     
     def render(self, context, instance, placeholder):
-        active_gallery = FilerGallery.objects.get(pk = instance)
         config = simplejson.dumps({
             'navigation': True,
             'interval': 2500,
             'numbers': True,
             'label': True,
-            'animation':ANIMATION_CHOICES[active_gallery.animation][1],
+            'animation': ANIMATION_CHOICES[instance.animation][1],
             'thumbs': False,
             'hideTools': False,
             'dots': False,
@@ -28,8 +27,7 @@ class FilerGalleryPlugin(CMSPluginBase):
             'velocity': 1,
             'animateNumberOut': {'backgroundColor':'#000', 'color':'#ccc'},
             'animateNumberOver': {'backgroundColor':'#000', 'color':'#ccc'},
-            #'animateNumberActive': {'backgroundColor':'#000', 'color':'#ccc'},
-            'animateNumberActive': {'backgroundColor':'#000', 'color':active_gallery.animateNumberActive},
+            'animateNumberActive': {'backgroundColor':'#000', 'color': instance.animate_number_active},
             'width_label': None,
             'show_randomly': False
             }
