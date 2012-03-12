@@ -1,59 +1,27 @@
-{% load thumbnail sekizai_tags %}
-{% addtoblock "css" %}<link href="{{ STATIC_URL }}filer_gallery/skitter/css/skitter.styles.css" type="text/css" media="all" rel="stylesheet" />{% endaddtoblock %}
-{% addtoblock "css" %}<link href="{{ STATIC_URL }}filer_gallery/skitter.css" type="text/css" media="all" rel="stylesheet" />{% endaddtoblock %}
-{% addtoblock "css" %}<link href="{{ STATIC_URL }}filer_gallery/filer_gallery.css" type="text/css" media="all" rel="stylesheet" />{% endaddtoblock %}
+{% load thumbnail sekizai_tags filters l10n %}
 
-{% addtoblock "js" %}<script src="{{ STATIC_URL }}filer_gallery/skitter/js/jquery-1.6.3.min.js"></script>{% endaddtoblock %}
-{% addtoblock "js" %}<script src="{{ STATIC_URL }}filer_gallery/skitter/js/jquery.easing.1.3.js"></script>{% endaddtoblock %}
-{% addtoblock "js" %}<script src="{{ STATIC_URL }}filer_gallery/skitter/js/jquery.animate-colors-min.js"></script>{% endaddtoblock %}
-
-{% addtoblock "js" %}<script src="{{ STATIC_URL }}filer_gallery/skitter/js/jquery.skitter.js"></script>{% endaddtoblock %}
-{% addtoblock "js" %}<script src="{{ STATIC_URL }}filer_gallery/skitter_init.js"></script>{% endaddtoblock %}
-
+{% addtoblock "js" %}<script src="{{ STATIC_URL }}cmsplugin_filer_gallery/galleria/galleria-1.2.6.js"></script>{% endaddtoblock %}
 
 {% addtoblock "js" %}
 <script type="text/javascript">
 //<![CDATA[
-(function ($) {
-    var config = {{ skitter_config|safe }}
-    $(document).ready(function () {
-       $('#filer-gallery-plugin-{{ instance.pk }}').skitter(config);
-       $('#filer-gallerythumbs-plugin-{{ instance.pk }} img:first').addClass('active')
-       $('#filer-gallery-plugin-{{ instance.pk }}').bind("imageSwitched", function(event, skitter, imagenum ) {
-           $('#filer-gallerythumbs-plugin-{{ gallery.pk }} img').removeClass('active')
-           var child = imagenum == 0 ? 'last' : 'nth-child(' + imagenum + ')'
-           $('#filer-gallerythumbs-plugin-{{ gallery.pk }} img:' + child).addClass('active')
-       });
-
-    });
-})(skitter_jQuery)
+Galleria.loadTheme('{{ STATIC_URL }}cmsplugin_filer_gallery/galleria/themes/classic/galleria.classic.min.js')
+$("#filer-gallery-plugin-{{ instance.pk }}").galleria({
+/*
+  width: {{ instance.width }},
+*/  
+  height:  $("#filer-gallery-plugin-{{ instance.pk }}").width() * {{ instance.gallery.images.all.0.image|aspect_ratio|unlocalize }}
+});
 //]]>
 </script>
 {% endaddtoblock %}
 
-<div class="filer-gallery-wrapper border_shadow">
-<div class="filer-gallery-imagewrapper">
-
-<div id="filer-gallery-plugin-{{ instance.pk }}" class="box_skitter box_skitter_medium">
+<div id="filer-gallery-plugin-{{ instance.pk }}" style="width: 100%;">
     <ul>
-    {% for image in instance.gallery.galleryimage_set.all %}
+    {% for image in instance.gallery.images.all %}
         <li>
-            <a href="#"><img src="{% thumbnail image.image size %}" /></a>
-            <div class="label_text">
-                <p>{{ image.title }}</p>
-            </div>
+            <a data-ajax="false" href="{{ image.image.url }}"><img src="{% thumbnail image.image 64x64 %}" alt="{{ image.image.name }}" title="{{ image.image.description }}"/></a>
         </li>
     {% endfor %}
     </ul> 
-</div>
-</div>
-{% if instance.thumb_height %}
-<div id="filer-gallerythumbs-{{ instance.pk }}" class="filer-gallery-thumbswrapper">
-{% spaceless %}
-{% for image in instance.gallery.galleryimage_set.all %}
-<img src="{% thumbnail image.image thumb_size %}" onclick="skitter_jQuery('#filer-gallery-{{ instance.pk }}').skitter('setimage', {{ forloop.counter0 }});return false"/>
-{% endfor %}
-{% endspaceless %}
-</div>
-{% endif %}
 </div>
