@@ -5,6 +5,7 @@ from cms.models import CMSPlugin, Page
 
 ANIMATION_CHOICES=('fade', 'horizontal-slide', 'vertical-slide', 'horizontal-push')
 ANIMATION_CHOICES=tuple(enumerate(ANIMATION_CHOICES))
+
 CAPTION_ANIMATION_CHOICES=('fade', 'slideOpen')
 CAPTION_ANIMATION_CHOICES=tuple(enumerate(CAPTION_ANIMATION_CHOICES))
 
@@ -16,10 +17,20 @@ class FilerGallery(CMSPlugin):
     animate_number_active = models.CharField(_("active number color"), default='#FF0000', max_length=7, help_text=_('Default #FF0000 red'))
 
 
-    height = models.SmallIntegerField(_("height"),default=200)
-    width = models.SmallIntegerField(_("width"), default=300)
-    thumb_height = models.SmallIntegerField(_("thumbnail height"), null=True, blank=True, default=None, help_text=_('Leave empty for no thumbs.'))
-    thumb_width = models.SmallIntegerField(_("thumbnail width"),null=True, blank=True, default=None, help_text=_('Leave empty for no thumbs.'))
+    height = models.SmallIntegerField(_("height"),default=200,
+                                      null=True, blank=True,
+                                      help_text=_('Leave empty for auto width'))
+    width = models.SmallIntegerField(_("width"), default=300,
+                                     null=True, blank=True,
+                                     help_text=_('Leave empty for auto width'))
+    thumb_height = models.SmallIntegerField(_("thumbnail height"), 
+                                            null=True, blank=True, 
+                                            default=None,
+                                            help_text=_('Leave empty for no thumbs.'))
+    thumb_width = models.SmallIntegerField(_("thumbnail width"),
+                                           null=True, blank=True,
+                                            default=None, 
+                                            help_text=_('Leave empty for no thumbs.'))
     
     class Meta:
         verbose_name = _("django filer gallery")
