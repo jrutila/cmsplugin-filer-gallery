@@ -11,25 +11,15 @@ class FilerGalleryPlugin(CMSPluginBase):
     render_template = "cmsplugin_filer_gallery/gallery.html"
     text_enabled = False
     raw_id_fields = ('gallery',)
-    admin_preview = False
+    admin_preview = False,
+    change_form_template="cmsplugin_filer_gallery/plugin_change.html"
     
     def render(self, context, instance, placeholder):
         config = simplejson.dumps({
-            'navigation': True,
-            'interval': 2500,
-            'numbers': True,
-            'label': True,
             'animation': ANIMATION_CHOICES[instance.animation][1],
-            'thumbs': False,
-            'hideTools': False,
-            'dots': False,
-            'easing_default': None,
-            'velocity': 1,
-            'animateNumberOut': {'backgroundColor':'#000', 'color':'#ccc'},
-            'animateNumberOver': {'backgroundColor':'#000', 'color':'#ccc'},
-            'animateNumberActive': {'backgroundColor':'#000', 'color': instance.animate_number_active},
-            'width_label': None,
-            'show_randomly': False
+            'height': instance.height,
+            'width': instance.width,
+            'lightbox': True,
             }
         )
         context.update({
