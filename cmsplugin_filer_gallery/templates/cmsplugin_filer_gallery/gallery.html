@@ -1,27 +1,39 @@
 {% load thumbnail sekizai_tags filters l10n %}
+{% addtoblock "js" %}<script src="{{ STATIC_URL }}cmsplugin_filer_gallery/galleria/galleria-1.2.8.js"></script>{% endaddtoblock %}
+<style>
+	#filer-gallery-plugin-{{ instance.pk }} .galleria-container {
+		background: none;
+	}
+</style>
 
-{% addtoblock "js" %}<script src="{{ STATIC_URL }}cmsplugin_filer_gallery/galleria/galleria-1.2.6.js"></script>{% endaddtoblock %}
+{% with instance.gallery.images.all as gallery_images %}
+{%if gallery_images %}
+{% addtoblock "css"%}<link rel="stylesheet" href="{{ STATIC_URL }}cmsplugin_filer_gallery/galleria/themes/classic/galleria.classic.css">{% endaddtoblock%}
+{% addtoblock "js" %}<script src="{{ STATIC_URL }}cmsplugin_filer_gallery/galleria/themes/classic/galleria.classic.min.js"></script>{% endaddtoblock %}
 
 {% addtoblock "js" %}
 <script type="text/javascript">
 //<![CDATA[
-Galleria.loadTheme('{{ STATIC_URL }}cmsplugin_filer_gallery/galleria/themes/classic/galleria.classic.min.js')
-$("#filer-gallery-plugin-{{ instance.pk }}").galleria({
-/*
-  width: {{ instance.width }},
-*/  
-  height:  $("#filer-gallery-plugin-{{ instance.pk }}").width() * {{ instance.gallery.images.all.0.image|aspect_ratio|unlocalize }}
-});
+
+var config={{skitter_config|safe}};
+
+$("#filer-gallery-plugin-{{ instance.pk }}").galleria(config);
 //]]>
 </script>
 {% endaddtoblock %}
 
 <div id="filer-gallery-plugin-{{ instance.pk }}" style="width: 100%;">
     <ul>
-    {% for image in instance.gallery.images.all %}
+    {% for image in gallery_images %}
         <li>
-            <a data-ajax="false" href="{{ image.image.url }}"><img src="{% thumbnail image.image 64x64 %}" alt="{{ image.image.name }}" title="{{ image.image.description }}"/></a>
+            <a data-ajax="false" href="{{ image.image.url }}"><img src="{% thumbnail image.image 64x64 %}" alt="{{ image.image.description }}" title="{{ image.image.name }}"/></a>
         </li>
     {% endfor %}
     </ul> 
 </div>
+{%else%}
+<div id="filer-gallery-plugin-{{ instance.pk }}" style="width: 100%;">
+<h1>No images in {{ instance.gallery.title }}</h1>
+</div>
+{% endif%}
+{% endwith %}
