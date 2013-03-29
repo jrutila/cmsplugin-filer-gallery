@@ -1,5 +1,5 @@
 {% load thumbnail sekizai_tags filters l10n %}
-{% addtoblock "js" %}<script src="{{ STATIC_URL }}cmsplugin_filer_gallery/galleria/galleria-1.2.8.js"></script>{% endaddtoblock %}
+{% addtoblock "js" %}<script src="{{ STATIC_URL }}cmsplugin_filer_gallery/galleria/galleria.min.js"></script>{% endaddtoblock %}
 <style>
 	#filer-gallery-plugin-{{ instance.pk }} .galleria-container {
 		background: none;
@@ -14,21 +14,29 @@
 {% addtoblock "js" %}
 <script type="text/javascript">
 //<![CDATA[
-
-var config={{skitter_config|safe}};
-
+var config={{config|safe}};
 $("#filer-gallery-plugin-{{ instance.pk }}").galleria(config);
 //]]>
 </script>
 {% endaddtoblock %}
 
-<div id="filer-gallery-plugin-{{ instance.pk }}" style="width: 100%;">
+<div id="filer-gallery-plugin-{{ instance.pk }}" style="width: 100%; height: {{instance.height}}px;">
     <ul>
-    {% for image in gallery_images %}
-        <li>
-            <a data-ajax="false" href="{{ image.image.url }}"><img src="{% thumbnail image.image 64x64 %}" alt="{{ image.image.description }}" title="{{ image.image.name }}"/></a>
-        </li>
+    {% with instance.size_x as size %}
+    {% for image_field in gallery_images %}
+            {% thumbnail image_field.image size crop=config.crop upscale=config.upscale subject_location=image_field.image.subject_location as image %}
+            <a data-ajax="false" href="{{ image.url }}">
+                <img src="{% thumbnail image_field.image 64x64 subject_location=image_field.image.subject_location%}" 
+                    data-big="{{ image_field.image.url }}" 
+                    data-description="{{ image_field.image.description }}" 
+                    data-title="{{ image_field.image.label }}"
+                    title="{{ image_field.image.label }}"
+                    alt="{{ image_field.image.default_alt_text }}"
+                    />
+            </a>
     {% endfor %}
+    {% endwith %}
+    
     </ul> 
 </div>
 {%else%}

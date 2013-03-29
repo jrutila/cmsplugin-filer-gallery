@@ -16,17 +16,20 @@ class FilerGalleryPlugin(CMSPluginBase):
     
     def render(self, context, instance, placeholder):
         config = simplejson.dumps({
-            'animation': ANIMATION_CHOICES[instance.animation][1],
+            'transition': ANIMATION_CHOICES[instance.animation][1],
+            'initialTransition': ANIMATION_CHOICES[instance.first_animation][1],
+           
             'height': instance.height,
             'width': instance.width,
-            'lightbox': True,
+            'lightbox': instance.lightbox,
+            'imagePan' :True,
+            'autoplay' : instance.autoplay,
             }
         )
         context.update({
             'instance': instance,
             'size': (instance.width, instance.height),
-            'thumb_size': (instance.thumb_height, instance.thumb_width),
-            'skitter_config': config
+            'config': config
         })
         return context
 
