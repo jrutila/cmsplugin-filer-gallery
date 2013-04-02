@@ -2,16 +2,15 @@
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
 from cms.models import CMSPlugin, Page
+from positions.fields import PositionField
 
+from datetime import datetime
+from filer.fields.image import FilerImageField
 ANIMATION_CHOICES=('fade','flash','pulse','slide', 'fadeslide')
 ANIMATION_CHOICES=tuple(enumerate(ANIMATION_CHOICES))
 
-CAPTION_ANIMATION_CHOICES=('fade', 'slideOpen')
-CAPTION_ANIMATION_CHOICES=tuple(enumerate(CAPTION_ANIMATION_CHOICES))
 
 class FilerGallery(CMSPlugin):
-
-    gallery = models.ForeignKey('filer_gallery.Gallery')
 
     animation = models.SmallIntegerField(_("animation"), choices=ANIMATION_CHOICES, default=0)
     first_animation = models.SmallIntegerField(_("first image animation"), choices=ANIMATION_CHOICES, default=0)
@@ -31,18 +30,38 @@ class FilerGallery(CMSPlugin):
     lightbox = models.BooleanField(_("lightbox"), default=True,
                                     help_text=_('show fullscreen image in lightbox'))
     
+    
+    
     @property
     def autoplay(self):
         if not self.autoplay_active:
             return False
         return self.autoplay_timeout
-        
-    @property
-    def size_x(self):
-        # size for thmbnailer to use for images widthxheight
-        size = str(self.width-20)+'x'+ str(self.height-70)
-        return size
     
     class Meta:
         verbose_name = _("django filer gallery")
         verbose_name_plural = _("django filer galleries")
+        
+        
+        
+class GalleryImage(models.Model):
+    gallery = models.ForeignKey(FilerGallery, related_name="images")
+    image = FilerImageField(related_name="imagesss")
+    active = models.BooleanField(_('Active'), default=True)
+    pub_date = models.DateTimeField(default=datetime.now)   
+    order = models.IntegerField(default=1)
+    ordering = PositionField(collection='gallery')
+    
+    class Meta:
+        ordering = ['order']
+        verbose_name = _('Gallery Image')
+        verbose_name_plural = _('Gallery Images')
+
+    def __unicode__(self):
+        """Return the FilerImage name"""
+        return u"%s" % self.image
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.pub_date = self.image.date_taken
+        super(GalleryImage, self).save(*args, **kwargs)
