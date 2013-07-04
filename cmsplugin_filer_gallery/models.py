@@ -41,7 +41,12 @@ class FilerGallery(CMSPlugin):
     class Meta:
         verbose_name = _("django filer gallery")
         verbose_name_plural = _("django filer galleries")
-        
+    
+    def copy_relations(self,old_plugin):
+       for image in old_plugin.images.all():
+           image.gallery = self
+           image.pk = None
+           image.save()
         
         
 class GalleryImage(models.Model):
