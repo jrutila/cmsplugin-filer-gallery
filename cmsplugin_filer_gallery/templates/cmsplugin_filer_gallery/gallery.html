@@ -17,7 +17,8 @@
     <script type="text/javascript">
     //<![CDATA[
     var config={{config|safe}};
-    $("#filer-gallery-plugin-{{ instance.pk }}").galleria(config);
+    config["_toggleInfo"]=false; //Set this true if you want to toogle display off.
+    $("#filer-gallery-plugin-{{ instance.pk }}").galleria(config); 
     //]]>
     </script>
     {% endaddtoblock %}
