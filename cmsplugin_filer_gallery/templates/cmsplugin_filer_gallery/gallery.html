@@ -18,12 +18,15 @@
     //<![CDATA[
     var config={{config|safe}};
     config["_toggleInfo"]=false; //Set this true if you want to toogle display off.
+    config["responsive"]=true; //Set this true if you want to toogle display off.
+    delete config['width'];
+
     $("#filer-gallery-plugin-{{ instance.pk }}").galleria(config); 
     //]]>
     </script>
     {% endaddtoblock %}
     
-    <div id="filer-gallery-plugin-{{ instance.pk }}" class="filer-gallery-plugin" style="width: {{g_width}}px; height: {{g_height}}px;">
+    <div id="filer-gallery-plugin-{{ instance.pk }}" class="filer-gallery-plugin" style="width:100%; height: {{g_height}}px;">
         {% for image_field in gallery_images %}
                 {% thumbnail image_field.image thumb_size crop=config.crop upscale=config.upscale subject_location=image_field.image.subject_location as image %}
                 <a style="display:none" data-ajax="false" href="{{ image.url }}">

@@ -68,7 +68,7 @@
 	background-image: url('galleria_palkki_black60.png');
     z-index: 2;
     position: absolute;
-	height: 50px;
+	height: 35px;
 	top: initial;
 	left: 0px;
 	right: 0px;
@@ -90,7 +90,7 @@
     color: #fff;
     margin-bottom: 5px;
 	margin-top: 5px;
-    padding-top: 10px
+    padding-top: 5px
 
 }
 .galleria-info-description {
