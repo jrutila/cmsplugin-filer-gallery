@@ -11,7 +11,7 @@ class FilerGalleryPlugin(CMSPluginBase):
     model = FilerGallery
     name = _("Filer Gallery")
     render_template = "cmsplugin_filer_gallery/gallery.html"
-    text_enabled = False
+    text_enabled = True
     raw_id_fields = ('gallery',)
     admin_preview = False,
     inlines = [ImageInline, ]

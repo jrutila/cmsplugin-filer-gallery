@@ -1,1 +1,1 @@
-galleria-1.2.9.js
+/home/troyhy/workspace/shopguard/env/src/cmsplugin-filer-gallery/cmsplugin_filer_gallery/static/cmsplugin_filer_gallery/galleria/galleria-1.3.5.js
