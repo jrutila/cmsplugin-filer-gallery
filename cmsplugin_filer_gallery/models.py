@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.db.models import SmallIntegerField, BooleanField
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
 from cms.models import CMSPlugin, Page
@@ -6,29 +7,45 @@ from positions.fields import PositionField
 
 from datetime import datetime
 from filer.fields.image import FilerImageField
-ANIMATION_CHOICES=('fade','flash','pulse','slide', 'fadeslide')
-ANIMATION_CHOICES=tuple(enumerate(ANIMATION_CHOICES))
+ANIMATION_CHOICES = ('fade','flash','pulse','slide', 'fadeslide')
+ANIMATION_CHOICES = tuple(enumerate(ANIMATION_CHOICES))
 
+QUALITY_CHOICES = ('low', 'normal', 'high')
+QUALITY_CHOICES = tuple(enumerate(QUALITY_CHOICES))
+
+QUALITY_SIZE = ['320x200', '640x480', '800x600']
 
 class FilerGallery(CMSPlugin):
 
-    animation = models.SmallIntegerField(_("animation"), choices=ANIMATION_CHOICES, default=0)
-    first_animation = models.SmallIntegerField(_("first image animation"), choices=ANIMATION_CHOICES, default=0)
-    
+    animation = SmallIntegerField(_("animation"),
+                                  choices=ANIMATION_CHOICES,
+                                  default=0)
+    first_animation = SmallIntegerField(_("first image animation"),
+                                        choices=ANIMATION_CHOICES,
+                                        default=0)
 
-    height = models.SmallIntegerField(_("height"),default=200,
-                                      null=True, blank=True,
-                                      help_text=_('Leave empty for auto width'))
-    width = models.SmallIntegerField(_("width"), default=300,
-                                     null=True, blank=True,
-                                     help_text=_('Leave empty for auto width'))
-    autoplay_active = models.BooleanField(_("autoplay"), default=False,
-                                    help_text=_('Start playing automatically'))
+    quality = SmallIntegerField(_("Image quality"),
+                                choices=QUALITY_CHOICES,
+                                default=1)
+
+    height = SmallIntegerField(_("Gallery height"), default=300,
+                               null=True, blank=True,
+                               help_text=_('Height of gallery'))
+
+    width = SmallIntegerField(_("Gallery width"), default=None,
+                              null=True, blank=True,
+                              help_text=_('Leave empty for auto width'))
+
+    autoplay_active = BooleanField(_("autoplay"), default=False,
+                                   help_text=_('Start playing automatically'))
     
-    autoplay_timeout = models.SmallIntegerField(_("autoplay timeout"), default=3000,
-                                    help_text=_('Timeout for next picture in ms'))
-    lightbox = models.BooleanField(_("lightbox"), default=True,
-                                    help_text=_('show fullscreen image in lightbox'))
+    autoplay_timeout = models.SmallIntegerField(
+        _("autoplay timeout"),
+        default=3000, help_text=_('Timeout for next picture in ms'))
+
+    lightbox = models.BooleanField(
+        _("lightbox"), default=True,
+        help_text=_('show fullscreen image in lightbox'))
     
     
     

@@ -4,14 +4,15 @@
 <style>
 	#filer-gallery-plugin-{{ instance.pk }} .galleria-container {
 		background: none;
+        H1
 	}
 </style>
 
 {% with  gallery_images=instance.images.all g_height=size.height g_width=size.width thumb_size=size.thumb_size%}
 {%if gallery_images %}
 
-    {% addtoblock "css"%}<link rel="stylesheet" href="{{ STATIC_URL }}cmsplugin_filer_gallery/galleria/themes/classic/galleria.classic.css">{% endaddtoblock%}
-    {% addtoblock "js" %}<script src="{{ STATIC_URL }}cmsplugin_filer_gallery/galleria/themes/classic/galleria.classic.min.js"></script>{% endaddtoblock %}
+    {% addtoblock "css"%}<link rel="stylesheet" href="{{ STATIC_URL }}galleria/themes/miniml/galleria.miniml.css">{% endaddtoblock%}
+    {% addtoblock "js" %}<script src="{{ STATIC_URL }}galleria/themes/miniml/galleria.miniml.min.js"></script>{% endaddtoblock %}
     
     {% addtoblock "js" %}
     <script type="text/javascript">
@@ -19,14 +20,17 @@
     var config={{config|safe}};
     config["_toggleInfo"]=false; //Set this true if you want to toogle display off.
     config["responsive"]=true; //Set this true if you want to toogle display off.
-    delete config['width'];
+    config["clicknext"]=false;
+   
 
     $("#filer-gallery-plugin-{{ instance.pk }}").galleria(config); 
     //]]>
     </script>
     {% endaddtoblock %}
     
-    <div id="filer-gallery-plugin-{{ instance.pk }}" class="filer-gallery-plugin" style="width:100%; height: {{g_height}}px;">
+    <div id="filer-gallery-plugin-{{ instance.pk }}" class="filer-gallery-plugin"
+         style="width:{%  if g_width %}{{ g_width }}px{% else %}100%{% endif %};
+                height: {{g_height}}px;">
         {% for image_field in gallery_images %}
                 {% thumbnail image_field.image thumb_size crop=config.crop upscale=config.upscale subject_location=image_field.image.subject_location as image %}
                 <a style="display:none" data-ajax="false" href="{{ image.url }}">
@@ -42,7 +46,7 @@
     </div>
  
 {%else%}
-    <div id="filer-gallery-plugin-{{ instance.pk }}" style="width: 100%;">
+    <div id="filer-gallery-plugin-{{ instance.pk }}" param=1 style="width: 100%;">
     <h1>No images in gallery {{ instance.id}}</h1>
     </div>
 {% endif%}
