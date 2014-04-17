@@ -46,6 +46,10 @@ class FilerGallery(CMSPlugin):
     lightbox = models.BooleanField(
         _("lightbox"), default=True,
         help_text=_('show fullscreen image in lightbox'))
+
+    imagecrop = models.BooleanField(
+        _("ImageCrop"), default=False,
+        help_text=_('If selected image will be cropped'))
     
     
     

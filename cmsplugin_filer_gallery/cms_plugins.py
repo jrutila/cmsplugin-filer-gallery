@@ -27,6 +27,7 @@ class FilerGalleryPlugin(CMSPluginBase):
             'lightbox': instance.lightbox,
             'imagePan': True,
             'autoplay': instance.autoplay,
+            'imagecrop': instance.imagecrop,
         }
         )
 
