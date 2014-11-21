@@ -7,13 +7,20 @@ from positions.fields import PositionField
 
 from datetime import datetime
 from filer.fields.image import FilerImageField
-ANIMATION_CHOICES = ('fade','flash','pulse','slide', 'fadeslide')
+
+ANIMATION_CHOICES = ('fade', 'flash', 'pulse', 'slide', 'fadeslide')
 ANIMATION_CHOICES = tuple(enumerate(ANIMATION_CHOICES))
 
 QUALITY_CHOICES = ('low', 'normal', 'high')
 QUALITY_CHOICES = tuple(enumerate(QUALITY_CHOICES))
 
 QUALITY_SIZE = ['320x200', '640x480', '800x600']
+
+INSTALLED_THEMES = [
+    ('classic', 'classic'),
+    ('miniml', 'miniml')
+]
+
 
 class FilerGallery(CMSPlugin):
 
@@ -50,9 +57,12 @@ class FilerGallery(CMSPlugin):
     imagecrop = models.BooleanField(
         _("ImageCrop"), default=False,
         help_text=_('If selected image will be cropped'))
-    
-    
-    
+
+    theme = models.CharField(choices=INSTALLED_THEMES,
+                             help_text=_('Theme for current gallery'),
+                             max_length=10,
+                             default='classic')
+
     @property
     def autoplay(self):
         if not self.autoplay_active:
@@ -62,24 +72,23 @@ class FilerGallery(CMSPlugin):
     class Meta:
         verbose_name = _("django filer gallery")
         verbose_name_plural = _("django filer galleries")
-    
-    def copy_relations(self,old_plugin):
-       for image in old_plugin.images.all():
-           image.gallery = self
-           image.pk = None
-           image.save()
+
+    def copy_relations(self, old_plugin):
+        for image in old_plugin.images.all():
+            image.gallery = self
+            image.pk = None
+            image.save()
         
         
 class GalleryImage(models.Model):
     gallery = models.ForeignKey(FilerGallery, related_name="images")
     image = FilerImageField(related_name="imagesss")
     active = models.BooleanField(_('Active'), default=True)
-    pub_date = models.DateTimeField(default=datetime.now)   
-    order = models.IntegerField(default=1)
+    pub_date = models.DateTimeField(default=datetime.now)
     ordering = PositionField(collection='gallery')
     
     class Meta:
-        ordering = ['order']
+        ordering = ['ordering']
         verbose_name = _('Gallery Image')
         verbose_name_plural = _('Gallery Images')
 

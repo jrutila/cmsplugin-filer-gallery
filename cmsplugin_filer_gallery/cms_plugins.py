@@ -38,7 +38,6 @@ class FilerGalleryPlugin(CMSPluginBase):
         })
         return context
 
-
     def _get_size_options(self, context, instance):
         """
         Return the size and options of the thumbnail that should be inserted
