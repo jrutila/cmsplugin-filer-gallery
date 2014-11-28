@@ -4,6 +4,7 @@ from cms.plugin_pool import plugin_pool
 from cms.plugin_base import CMSPluginBase
 from cmsplugin_filer_gallery.models import FilerGallery, QUALITY_SIZE
 from cmsplugin_filer_gallery.models import ANIMATION_CHOICES
+import django
 
 from cmsplugin_filer_gallery.admin import ImageInline
 
@@ -16,7 +17,10 @@ class FilerGalleryPlugin(CMSPluginBase):
     raw_id_fields = ('gallery',)
     admin_preview = False,
     inlines = [ImageInline, ]
-    change_form_template = "cmsplugin_filer_gallery/plugin_change.html"
+    if django.VERSION[1] > 4:
+        change_form_template = "cmsplugin_filer_gallery/plugin_change.html"
+    else:
+        change_form_template = "cmsplugin_filer_gallery/plugin_change_old.html"
 
     def render(self, context, instance, placeholder):
         config = simplejson.dumps({
