@@ -8,15 +8,39 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        # Deleting field 'GalleryImage.order'
+        db.delete_column('cmsplugin_filer_gallery_galleryimage', 'order')
+
+        # Adding field 'FilerGallery.quality'
+        db.add_column('cmsplugin_filergallery', 'quality',
+                      self.gf('django.db.models.fields.SmallIntegerField')(default=1),
+                      keep_default=False)
+
         # Adding field 'FilerGallery.imagecrop'
         db.add_column('cmsplugin_filergallery', 'imagecrop',
                       self.gf('django.db.models.fields.BooleanField')(default=False),
                       keep_default=False)
 
+        # Adding field 'FilerGallery.theme'
+        db.add_column('cmsplugin_filergallery', 'theme',
+                      self.gf('django.db.models.fields.CharField')(default='classic', max_length=10),
+                      keep_default=False)
+
 
     def backwards(self, orm):
+        # Adding field 'GalleryImage.order'
+        db.add_column('cmsplugin_filer_gallery_galleryimage', 'order',
+                      self.gf('django.db.models.fields.IntegerField')(default=1),
+                      keep_default=False)
+
+        # Deleting field 'FilerGallery.quality'
+        db.delete_column('cmsplugin_filergallery', 'quality')
+
         # Deleting field 'FilerGallery.imagecrop'
         db.delete_column('cmsplugin_filergallery', 'imagecrop')
+
+        # Deleting field 'FilerGallery.theme'
+        db.delete_column('cmsplugin_filergallery', 'theme')
 
 
     models = {
@@ -81,15 +105,15 @@ class Migration(SchemaMigration):
             'imagecrop': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'lightbox': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'quality': ('django.db.models.fields.SmallIntegerField', [], {'default': '1'}),
+            'theme': ('django.db.models.fields.CharField', [], {'default': "'classic'", 'max_length': '10'}),
             'width': ('django.db.models.fields.SmallIntegerField', [], {'default': 'None', 'null': 'True', 'blank': 'True'})
         },
         'cmsplugin_filer_gallery.galleryimage': {
-            'Meta': {'ordering': "['order']", 'object_name': 'GalleryImage'},
+            'Meta': {'ordering': "['ordering']", 'object_name': 'GalleryImage'},
             'active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'gallery': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'images'", 'to': "orm['cmsplugin_filer_gallery.FilerGallery']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'image': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'imagesss'", 'to': "orm['filer.Image']"}),
-            'order': ('django.db.models.fields.IntegerField', [], {'default': '1'}),
             'ordering': ('django.db.models.fields.IntegerField', [], {'default': '-1'}),
             'pub_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'})
         },
@@ -121,14 +145,14 @@ class Migration(SchemaMigration):
             'Meta': {'ordering': "('name',)", 'unique_together': "(('parent', 'name'),)", 'object_name': 'Folder'},
             'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            u'level': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
-            u'lft': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
+            'level': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
+            'lft': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
             'modified_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'owner': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'filer_owned_folders'", 'null': 'True', 'to': "orm['auth.User']"}),
             'parent': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'children'", 'null': 'True', 'to': "orm['filer.Folder']"}),
-            u'rght': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
-            u'tree_id': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
+            'rght': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
+            'tree_id': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
             'uploaded_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'})
         },
         'filer.image': {
