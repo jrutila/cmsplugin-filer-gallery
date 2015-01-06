@@ -12,17 +12,17 @@ class Migration(SchemaMigration):
         db.delete_column('cmsplugin_filer_gallery_galleryimage', 'order')
 
         # Adding field 'FilerGallery.quality'
-        db.add_column('cmsplugin_filergallery', 'quality',
+        db.add_column('cmsplugin_filer_gallery_filergallery', 'quality',
                       self.gf('django.db.models.fields.SmallIntegerField')(default=1),
                       keep_default=False)
 
         # Adding field 'FilerGallery.imagecrop'
-        db.add_column('cmsplugin_filergallery', 'imagecrop',
+        db.add_column('cmsplugin_filer_gallery_filergallery', 'imagecrop',
                       self.gf('django.db.models.fields.BooleanField')(default=False),
                       keep_default=False)
 
         # Adding field 'FilerGallery.theme'
-        db.add_column('cmsplugin_filergallery', 'theme',
+        db.add_column('cmsplugin_filer_gallery_filergallery', 'theme',
                       self.gf('django.db.models.fields.CharField')(default='classic', max_length=10),
                       keep_default=False)
 
@@ -34,13 +34,13 @@ class Migration(SchemaMigration):
                       keep_default=False)
 
         # Deleting field 'FilerGallery.quality'
-        db.delete_column('cmsplugin_filergallery', 'quality')
+        db.delete_column('cmsplugin_filer_gallery_filergallery', 'quality')
 
         # Deleting field 'FilerGallery.imagecrop'
-        db.delete_column('cmsplugin_filergallery', 'imagecrop')
+        db.delete_column('cmsplugin_filer_gallery_filergallery', 'imagecrop')
 
         # Deleting field 'FilerGallery.theme'
-        db.delete_column('cmsplugin_filergallery', 'theme')
+        db.delete_column('cmsplugin_filer_gallery_filergallery', 'theme')
 
 
     models = {

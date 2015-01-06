@@ -9,7 +9,7 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         # Adding model 'FilerGallery'
-        db.create_table('cmsplugin_filergallery', (
+        db.create_table('cmsplugin_filer_gallery_filergallery', (
             ('cmsplugin_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['cms.CMSPlugin'], unique=True, primary_key=True)),
             ('animation', self.gf('django.db.models.fields.SmallIntegerField')(default=0)),
             ('first_animation', self.gf('django.db.models.fields.SmallIntegerField')(default=0)),
@@ -36,7 +36,7 @@ class Migration(SchemaMigration):
 
     def backwards(self, orm):
         # Deleting model 'FilerGallery'
-        db.delete_table('cmsplugin_filergallery')
+        db.delete_table('cmsplugin_filer_gallery_filergallery')
 
         # Deleting model 'GalleryImage'
         db.delete_table('cmsplugin_filer_gallery_galleryimage')
