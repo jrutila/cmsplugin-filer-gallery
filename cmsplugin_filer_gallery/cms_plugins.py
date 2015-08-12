@@ -1,5 +1,5 @@
+import json
 from django.utils.translation import ugettext_lazy as _
-from django.utils import simplejson
 from cms.plugin_pool import plugin_pool
 from cms.plugin_base import CMSPluginBase
 from cmsplugin_filer_gallery.models import FilerGallery, QUALITY_SIZE
@@ -23,7 +23,7 @@ class FilerGalleryPlugin(CMSPluginBase):
         change_form_template = "cmsplugin_filer_gallery/plugin_change_old.html"
 
     def render(self, context, instance, placeholder):
-        config = simplejson.dumps({
+        config = json.dumps({
             'transition': ANIMATION_CHOICES[instance.animation][1],
             'initialTransition': ANIMATION_CHOICES[instance.first_animation][1],
             'height': instance.height,
@@ -56,7 +56,6 @@ class FilerGalleryPlugin(CMSPluginBase):
             retval.update({'width': width})
         elif placeholder_width:
             retval.update({'width': placeholder_width})
-
 
         if height:
             retval.update({'height': height})
