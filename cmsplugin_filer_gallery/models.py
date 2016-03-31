@@ -33,7 +33,7 @@ class FilerGallery(CMSPlugin):
 
     quality = SmallIntegerField(_("Image quality"),
                                 choices=QUALITY_CHOICES,
-                                default=1)
+                                default=2)
 
     height = SmallIntegerField(_("Gallery height"), default=300,
                                null=True, blank=True,

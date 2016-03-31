@@ -31,6 +31,7 @@ class FilerGalleryPlugin(CMSPluginBase):
             'lightbox': instance.lightbox,
             'imagePan': True,
             'autoplay': instance.autoplay,
+            'autoplay_timeout': instance.autoplay_timeout,
             'imagecrop': instance.imagecrop,
         }
         )
@@ -63,6 +64,7 @@ class FilerGalleryPlugin(CMSPluginBase):
             retval.update({'height': placeholder_height})
 
         retval.update({'thumb_size': QUALITY_SIZE[instance.quality]})
+
 
         return retval
 
