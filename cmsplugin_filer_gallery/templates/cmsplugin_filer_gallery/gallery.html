@@ -1,39 +1,55 @@
 {% load thumbnail sekizai_tags filters l10n %}
-{% addtoblock "js" %}<script src="{{ STATIC_URL }}cmsplugin_filer_gallery/galleria/galleria-1.2.8.js"></script>{% endaddtoblock %}
+{% addtoblock "js" %}<script src="{{ STATIC_URL }}cmsplugin_filer_gallery/galleria/galleria.min.js"></script>{% endaddtoblock %}
+
 <style>
 	#filer-gallery-plugin-{{ instance.pk }} .galleria-container {
 		background: none;
+        H1
 	}
 </style>
 
-{% with instance.gallery.images.all as gallery_images %}
-{%if gallery_images %}
-{% addtoblock "css"%}<link rel="stylesheet" href="{{ STATIC_URL }}cmsplugin_filer_gallery/galleria/themes/classic/galleria.classic.css">{% endaddtoblock%}
-{% addtoblock "js" %}<script src="{{ STATIC_URL }}cmsplugin_filer_gallery/galleria/themes/classic/galleria.classic.min.js"></script>{% endaddtoblock %}
+{% with  gallery_images=instance.images.all g_height=size.height g_width=size.width thumb_size=size.thumb_size %}
+{% if gallery_images %}
 
-{% addtoblock "js" %}
-<script type="text/javascript">
-//<![CDATA[
+    {% addtoblock "css"%}<link rel="stylesheet" href="{{ STATIC_URL }}cmsplugin_filer_gallery/galleria/themes/{{ instance.theme }}/galleria.{{ instance.theme }}.css">{% endaddtoblock%}
+    {% addtoblock "js" %}<script src="{{ STATIC_URL }}cmsplugin_filer_gallery/galleria/themes/{{ instance.theme }}/galleria.{{ instance.theme }}.min.js"></script>{% endaddtoblock %}
+    
+    {% addtoblock "js" %}
+    <script type="text/javascript">
+    //<![CDATA[
+    var config={{config|safe}};
+    config["_toggleInfo"]=false; //Set this true if you want to toogle display off.
+    config["responsive"]=true; //Set this true if you want to toogle display off.
+    config["clicknext"]=false;
+   
 
-var config={{skitter_config|safe}};
-
-$("#filer-gallery-plugin-{{ instance.pk }}").galleria(config);
-//]]>
-</script>
-{% endaddtoblock %}
-
-<div id="filer-gallery-plugin-{{ instance.pk }}" style="width: 100%;">
-    <ul>
-    {% for image in gallery_images %}
-        <li>
-            <a data-ajax="false" href="{{ image.image.url }}"><img src="{% thumbnail image.image 64x64 %}" alt="{{ image.image.description }}" title="{{ image.image.name }}"/></a>
-        </li>
-    {% endfor %}
-    </ul> 
-</div>
-{%else%}
-<div id="filer-gallery-plugin-{{ instance.pk }}" style="width: 100%;">
-<h1>No images in {{ instance.gallery.title }}</h1>
-</div>
-{% endif%}
+    $("#filer-gallery-plugin-{{ instance.pk }}").galleria(config); 
+    //]]>
+    </script>
+    {% endaddtoblock %}
+    
+    <div id="filer-gallery-plugin-{{ instance.pk }}" class="filer-gallery-plugin"
+         style="width:{%  if g_width %}{{ g_width }}px{% else %}100%{% endif %};
+                height: {{g_height}}px;">
+        {% for image_field in gallery_images %}
+                {% thumbnail image_field.image thumb_size crop=config.crop upscale=config.upscale subject_location=image_field.image.subject_location as image %}
+                <a style="display:none" data-ajax="false" href="{{ image.url }}">
+                {% thumbnail image_field.image 64x64 subject_location=image_field.image.subject_location as small_img %}
+                    <img src="{{ small_img.url }}"
+                        data-big="{{ image_field.image.url }}"
+                        data-description="{{ image_field.image.description }}" 
+                        data-title="{{ image_field.image.label }}"
+                        title="{{ image_field.image.label }}"
+                        alt="{{ image_field.image.default_alt_text }}"
+                        />
+                </a>
+        {% endfor %}
+    </div>
+ 
+{% else %}
+    <div id="filer-gallery-plugin-{{ instance.pk }}" param=1 style="width: 100%;">
+    <h1>No images in gallery {{ instance.id}}</h1>
+    </div>
+{% endif %}
 {% endwith %}
+
